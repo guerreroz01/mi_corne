@@ -5,7 +5,6 @@
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 #include "keys_es.h"
 #include "keys_es.h"
-#include "keys_es_latin_american.h"
 #include "keys_es_variation.h"
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
