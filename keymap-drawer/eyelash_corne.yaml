@@ -197,6 +197,5 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
-- p: [44, 45]
-  k: {t: '$$mdi:minus-circle-outline$$', type: none}
-  l: [Fn]
+- p: [43, 46]
+  k: {t: Fn, h: toggle}
