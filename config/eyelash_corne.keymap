@@ -83,7 +83,7 @@
 &trans  &kp N1           &kp N2          &kp N3            &kp N4               &kp N5                                         &mmv MOVE_UP                     &kp N6           &kp N7           &kp N8           &kp N9           &kp N0    &kp BSPC
 &trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1      &bt BT_SEL 2         &bt BT_SEL 3                   &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT        &kp HOME  &kp PG_UP
 &trans  &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &kp ES_LESS_THAN  &kp ES_GREATER_THAN  &rgb_ug RGB_EFF  &kp C_MUTE                    &mmv MOVE_DOWN                   &rgb_ug RGB_EFR  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp END   &kp PG_DN
-                                         &trans            &trans               &trans                                                                          &kp INS          &kp DEL          &trans
+                                         &trans            &trans               &trans                                                                          &kp INS          &trans           &kp DELETE
             >;
 
             sensor-bindings = <&scroll_encoder>;
@@ -92,10 +92,10 @@
         symbol {
             display-name = "SYMBOL";
             bindings = <
-&trans  &kp EXCL      &kp ES_AT_SIGN  &kp ES_HASH  &kp DLLR   &kp PRCNT                            &mmv MOVE_UP                     &kp ES_CARET  &kp ES_AMPS   &kp ES_ASTERISK      &kp ES_LEFT_PARENTHESIS  &kp ES_RIGHT_PARENTHESIS  &kp BSPC
-&trans  &bt BT_CLR    &mkp LCLK       &mkp MCLK    &mkp RCLK  &mkp MB4             &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp ES_MINUS  &kp ES_EQUAL  &kp ES_LEFT_BRACKET  &kp ES_RIGHT_BRACKET     &kp ES_BACKSLASH          &kp ES_GRAVE
-&trans  &out OUT_USB  &out OUT_BLE    &none        &none      &mkp MB5   &trans                    &mmv MOVE_DOWN                   &kp ES_UNDER  &kp ES_PLUS   &kp ES_LEFT_BRACE    &kp ES_RIGHT_BRACE       &kp ES_SLASH              &kp ES_TILDE
-                                      &trans       &trans     &kp SPACE                                                             &kp RET       &trans        &trans
+&trans  &kp EXCL      &kp ES_AT_SIGN  &kp ES_HASH               &kp DLLR         &kp PRCNT                            &mmv MOVE_UP                     &kp ES_CARET  &kp ES_AMPS   &kp ES_ASTERISK      &kp ES_LEFT_PARENTHESIS  &kp ES_RIGHT_PARENTHESIS  &kp BSPC
+&trans  &bt BT_CLR    &mkp LCLK       &mkp MCLK                 &mkp RCLK        &mkp MB4             &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp ES_MINUS  &kp ES_EQUAL  &kp ES_LEFT_BRACKET  &kp ES_RIGHT_BRACKET     &kp ES_BACKSLASH          &kp ES_GRAVE
+&trans  &out OUT_USB  &out OUT_BLE    &kp ES_INVERTED_QUESTION  &kp ES_QUESTION  &mkp MB5   &trans                    &mmv MOVE_DOWN                   &kp ES_UNDER  &kp ES_PLUS   &kp ES_LEFT_BRACE    &kp ES_RIGHT_BRACE       &kp ES_SLASH              &kp ES_TILDE
+                                      &trans                    &trans           &kp SPACE                                                             &kp RET       &trans        &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
@@ -104,10 +104,10 @@
         fn {
             display-name = "Fn";
             bindings = <
-&studio_unlock  &kp F1      &kp F2     &kp F3       &kp F4     &kp F5                                  &mmv MOVE_UP                     &kp F6       &kp F7     &kp F8       &kp F9      &kp F10          &kp F11
-&trans          &trans      &mkp LCLK  &mkp MCLK    &mkp RCLK  &mkp MB4                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &bootloader  &mkp LCLK  &mkp MCLK    &mkp RCLK   &kp PRINTSCREEN  &kp F12
-&trans          &sys_reset  &trans     &bootloader  &trans     &mkp MB5  &kp C_MUTE                    &mmv MOVE_DOWN                   &trans       &trans     &bootloader  &sys_reset  &kp SCROLLLOCK   &kp PAUSE_BREAK
-                                       &trans       &trans     &trans                                                                   &trans       &trans     &trans
+&studio_unlock  &kp F1      &kp F2     &kp F3       &kp F4     &kp F5                                  &mmv MOVE_UP                     &kp F6            &kp F7     &kp F8       &kp F9      &kp F10          &kp F11
+&trans          &trans      &mkp LCLK  &mkp MCLK    &mkp RCLK  &mkp MB4                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &bootloader       &mkp LCLK  &mkp MCLK    &mkp RCLK   &kp PRINTSCREEN  &kp F12
+&trans          &sys_reset  &trans     &bootloader  &trans     &mkp MB5  &kp C_MUTE                    &mmv MOVE_DOWN                   &kp SINGLE_QUOTE  &trans     &bootloader  &sys_reset  &kp SCROLLLOCK   &kp PAUSE_BREAK
+                                       &trans       &trans     &trans                                                                   &trans            &trans     &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
