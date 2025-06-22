@@ -57,8 +57,8 @@
         default_layer {
             display-name = "OLIVER";
             bindings = <
-&kp TAB         &kp Q  &kp W  &kp F     &kp P  &kp B                                      &kp UP                &kp J        &kp L  &kp O         &kp Y          &kp ES_N_TILDE  &kp BSPC
-&kp LEFT_SHIFT  &kp A  &kp R  &kp S     &kp T  &kp G                            &kp LEFT  &kp ENTER  &kp RIGHT  &kp M        &kp N  &kp ES_E      &kp I          &kp U           &kp ES_ACUTE
+&kp TAB         &kp Q  &kp W  &kp F     &kp P  &kp B                                      &kp UP                &kp J        &kp L  &kp U         &kp Y          &kp ES_N_TILDE  &kp BSPC
+&kp LEFT_SHIFT  &kp A  &kp R  &kp S     &kp T  &kp G                            &kp LEFT  &kp ENTER  &kp RIGHT  &kp M        &kp N  &kp ES_E      &kp I          &kp O           &kp ES_ACUTE
 &kp LCTRL       &kp X  &kp C  &kp D     &kp V  &kp Z               &kp SPACE              &kp DOWN              &kp K        &kp H  &kp ES_COMMA  &kp ES_PERIOD  &kp ES_MINUS    &kp ESC
                               &kp RWIN  &mo 1  &mt LEFT_ALT SPACE                                               &lt 3 ENTER  &mo 2  &kp RALT
             >;
@@ -69,10 +69,10 @@
         lower_layer {
             display-name = "NUMBER";
             bindings = <
-&trans  &kp N1           &kp N2          &kp N3        &kp N4        &kp N5                                         &mmv MOVE_UP                     &kp N6           &kp N7           &kp N8           &kp N9           &kp N0    &kp BSPC
-&trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3                   &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT        &kp HOME  &kp PG_UP
-&trans  &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &kp ES_SEMI   &kp ES_COLON  &rgb_ug RGB_EFF  &kp C_MUTE                    &mmv MOVE_DOWN                   &rgb_ug RGB_EFR  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp END   &kp PG_DN
-                                         &trans        &trans        &trans                                                                          &kp INS          &kp DEL          &trans
+&trans  &kp N1           &kp N2          &kp N3            &kp N4               &kp N5                                         &mmv MOVE_UP                     &kp N6           &kp N7           &kp N8           &kp N9           &kp N0    &kp BSPC
+&trans  &bt BT_CLR_ALL   &bt BT_SEL 0    &bt BT_SEL 1      &bt BT_SEL 2         &bt BT_SEL 3                   &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp LEFT         &kp DOWN         &kp UP           &kp RIGHT        &kp HOME  &kp PG_UP
+&trans  &rgb_ug RGB_OFF  &rgb_ug RGB_ON  &kp ES_LESS_THAN  &kp ES_GREATER_THAN  &rgb_ug RGB_EFF  &kp C_MUTE                    &mmv MOVE_DOWN                   &rgb_ug RGB_EFR  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &kp END   &kp PG_DN
+                                         &trans            &trans               &trans                                                                          &kp INS          &kp DEL          &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
