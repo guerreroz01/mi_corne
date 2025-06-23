@@ -60,6 +60,11 @@
             timeout-ms = <50>;
             slow-release;
         };
+
+        arch_key {
+            bindings = <&arch_key>;
+            key-positions = <28 13 36>;
+        };
     };
 
     macros {
@@ -67,7 +72,6 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings =
-                <&kp LS(LC(ES_K))>,
                 <&macro_tap>,
                 <&kp N1 &kp N0 &kp N1 &kp N2 &kp N1 &kp N9 &kp N5 &kp N7 &kp LS(O) &kp L &kp I &kp V &kp E &kp R &kp LS(R) &kp E &kp Y &kp E &kp S &kp UNDER>;
 
