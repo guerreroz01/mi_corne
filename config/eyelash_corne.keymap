@@ -62,16 +62,29 @@
         };
     };
 
+    macros {
+        arch_key: arch_key {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&none>,
+                <&macro_tap>,
+                <&kp LC(LS(ES_K)) &kp N1 &kp N0 &kp N1 &kp N2 &kp N1 &kp N9 &kp N5 &kp N7 &kp LS(O) &kp L &kp I &kp V &kp E &kp R &kp LS(R) &kp E &kp Y &kp E &kp S &kp UNDER>;
+
+            label = "ARCH_KEY";
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
             display-name = "OLIVER";
             bindings = <
-&kp TAB         &kp Q  &kp W  &kp F     &kp P  &kp B                                      &kp UP                &kp J               &kp L  &kp U         &kp Y          &kp ES_N_TILDE  &kp BSPC
-&kp LEFT_SHIFT  &kp A  &kp R  &kp S     &kp T  &kp G                            &kp LEFT  &kp ENTER  &kp RIGHT  &kp M               &kp N  &kp ES_E      &kp I          &kp O           &kp ES_ACUTE
-&kp LCTRL       &kp X  &kp C  &kp D     &kp V  &kp Z               &kp SPACE              &kp DOWN              &kp K               &kp H  &kp ES_COMMA  &kp ES_PERIOD  &kp ES_MINUS    &kp ESC
-                              &kp RWIN  &mo 1  &mt LEFT_ALT SPACE                                               &mt LEFT_ALT ENTER  &mo 2  &kp RALT
+&kp TAB         &kp Q  &kp W  &kp F     &kp P  &kp B                                &kp UP                &kp J               &kp L  &kp U         &kp Y          &kp ES_N_TILDE  &kp BSPC
+&kp LEFT_SHIFT  &kp A  &kp R  &kp S     &kp T  &kp G                      &kp LEFT  &kp ENTER  &kp RIGHT  &kp M               &kp N  &kp ES_E      &kp I          &kp O           &kp ES_ACUTE
+&kp LCTRL       &kp X  &kp C  &kp D     &kp V  &kp Z         &kp SPACE              &kp DOWN              &kp K               &kp H  &kp ES_COMMA  &kp ES_PERIOD  &kp ES_MINUS    &kp ESC
+                              &kp RWIN  &mo 1  &kp ES_SPACE                                               &mt LEFT_ALT ENTER  &mo 2  &kp RALT
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
