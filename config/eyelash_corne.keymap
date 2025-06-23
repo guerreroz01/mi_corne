@@ -65,6 +65,11 @@
             bindings = <&arch_key>;
             key-positions = <28 13 36>;
         };
+
+        caps_lock {
+            bindings = <&kp CAPSLOCK>;
+            key-positions = <13 27>;
+        };
     };
 
     macros {
@@ -73,7 +78,7 @@
             #binding-cells = <0>;
             bindings =
                 <&macro_tap>,
-                <&kp N1 &kp N0 &kp N1 &kp N2 &kp N1 &kp N9 &kp N5 &kp N7 &kp LS(O) &kp L &kp I &kp V &kp E &kp R &kp LS(R) &kp E &kp Y &kp E &kp S &kp UNDER>;
+                <&kp N1 &kp N0 &kp N1 &kp N2 &kp N1 &kp N9 &kp N5 &kp N7 &kp LS(O) &kp L &kp I &kp V &kp E &kp R &kp LS(R) &kp E &kp Y &kp E &kp S &kp ES_UNDER>;
 
             label = "ARCH_KEY";
         };
