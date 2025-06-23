@@ -199,3 +199,5 @@ layers:
 combos:
 - p: [43, 46]
   k: Fn
+- p: [28, 13, 36]
+  k: '&arch_key'

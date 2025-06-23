@@ -555,6 +555,13 @@ rect.held, rect.combo.held {
 <a href="#Fn">
 <text x="490" y="209" class="combo tap layer-activator">Fn</text>
 </a></g>
+<g class="combo combopos-1">
+<path d="M243,140 l-196,19" class="combo"/>
+<path d="M243,140 l-196,-32" class="combo"/>
+<path d="M243,140 l411,13" class="combo"/>
+<rect rx="6" ry="6" x="229" y="127" width="28" height="26" class="combo"/>
+<text x="243" y="140" class="combo tap"><tspan style="font-size: 67%">&amp;arch_key</tspan></text>
+</g>
 </g>
 </g>
 <g transform="translate(40, 318)" class="layer-NUMBER">
@@ -848,6 +855,13 @@ rect.held, rect.combo.held {
 <a href="#Fn">
 <text x="490" y="209" class="combo tap layer-activator">Fn</text>
 </a></g>
+<g class="combo combopos-1">
+<path d="M243,140 l-196,19" class="combo"/>
+<path d="M243,140 l-196,-32" class="combo"/>
+<path d="M243,140 l411,13" class="combo"/>
+<rect rx="6" ry="6" x="229" y="127" width="28" height="26" class="combo"/>
+<text x="243" y="140" class="combo tap"><tspan style="font-size: 67%">&amp;arch_key</tspan></text>
+</g>
 </g>
 </g>
 <g transform="translate(40, 637)" class="layer-SYMBOL">
@@ -1153,6 +1167,13 @@ rect.held, rect.combo.held {
 <a href="#Fn">
 <text x="490" y="209" class="combo tap layer-activator">Fn</text>
 </a></g>
+<g class="combo combopos-1">
+<path d="M243,140 l-196,19" class="combo"/>
+<path d="M243,140 l-196,-32" class="combo"/>
+<path d="M243,140 l411,13" class="combo"/>
+<rect rx="6" ry="6" x="229" y="127" width="28" height="26" class="combo"/>
+<text x="243" y="140" class="combo tap"><tspan style="font-size: 67%">&amp;arch_key</tspan></text>
+</g>
 </g>
 </g>
 <g transform="translate(40, 955)" class="layer-Fn">
@@ -1414,6 +1435,13 @@ rect.held, rect.combo.held {
 <a href="#Fn">
 <text x="490" y="209" class="combo tap layer-activator">Fn</text>
 </a></g>
+<g class="combo combopos-1">
+<path d="M243,140 l-196,19" class="combo"/>
+<path d="M243,140 l-196,-32" class="combo"/>
+<path d="M243,140 l411,13" class="combo"/>
+<rect rx="6" ry="6" x="229" y="127" width="28" height="26" class="combo"/>
+<text x="243" y="140" class="combo tap"><tspan style="font-size: 67%">&amp;arch_key</tspan></text>
+</g>
 </g>
 </g>
 </svg>
