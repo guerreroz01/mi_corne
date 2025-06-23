@@ -45,7 +45,7 @@ layers:
   - $$mdi:keyboard-esc$$
   - RWIN
   - NUMBER
-  - {t: '$$mdi:keyboard-space$$', h: '$$mdi:apple-keyboard-option$$'}
+  - (ZMK HID USAGE(HID USAGE KEY, HID USAGE KEY KEYBOARD SPACEBAR))
   - {t: '$$mdi:keyboard-return$$', h: '$$mdi:apple-keyboard-option$$'}
   - SYMBOL
   - $$mdi:apple-keyboard-option$$
