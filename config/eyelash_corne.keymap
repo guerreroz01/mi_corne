@@ -116,7 +116,7 @@
             bindings = <
 &trans  &kp EXCL      &kp ES_AT_SIGN  &kp ES_HASH               &kp DLLR         &kp PRCNT                            &mmv MOVE_UP                     &kp ES_CARET      &kp ES_AMPS   &kp ES_ASTERISK      &kp ES_LEFT_PARENTHESIS  &kp ES_RIGHT_PARENTHESIS  &kp BSPC
 &trans  &bt BT_CLR    &mkp LCLK       &mkp MCLK                 &mkp RCLK        &mkp MB4             &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp SINGLE_QUOTE  &kp ES_EQUAL  &kp ES_LEFT_BRACKET  &kp ES_RIGHT_BRACKET     &kp ES_BACKSLASH          &kp ES_GRAVE
-&trans  &out OUT_USB  &out OUT_BLE    &kp ES_INVERTED_QUESTION  &kp ES_QUESTION  &mkp MB5   &trans                    &mmv MOVE_DOWN                   &kp ES_UNDER      &kp ES_PLUS   &kp ES_LEFT_BRACE    &kp ES_RIGHT_BRACE       &kp ES_SLASH              &kp ES_TILDE
+&trans  &out OUT_USB  &out OUT_BLE    &kp ES_INVERTED_QUESTION  &kp ES_QUESTION  &mkp MB5   &trans                    &mmv MOVE_DOWN                   &kp ES_PIPE       &kp ES_PLUS   &kp ES_LEFT_BRACE    &kp ES_RIGHT_BRACE       &kp ES_SLASH              &kp ES_TILDE
                                       &trans                    &trans           &kp SPACE                                                             &kp RET           &trans        &trans
             >;
 
