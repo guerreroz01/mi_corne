@@ -126,10 +126,10 @@
         fn {
             display-name = "Fn";
             bindings = <
-&studio_unlock  &kp F1          &kp F2  &kp F3       &kp F4      &kp F5                                    &mmv MOVE_UP                     &kp F6      &kp F7            &kp F8       &kp F9          &kp F10          &kp F11
-&trans          &bt BT_CLR_ALL  &none   &bt BT_NXT   &bt BT_PRV  &bt BT_CLR                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp C_STOP  &kp C_PLAY_PAUSE  &kp C_NEXT   &kp C_PREVIOUS  &kp PRINTSCREEN  &kp F12
-&trans          &sys_reset      &none   &bootloader  &none       &none       &kp C_MUTE                    &mmv MOVE_DOWN                   &none       &none             &bootloader  &sys_reset      &kp SCROLLLOCK   &kp PAUSE_BREAK
-                                        &trans       &trans      &trans                                                                     &trans      &trans            &trans
+&studio_unlock  &kp F1          &kp F2  &kp F3       &kp F4      &kp F5                                    &mmv MOVE_UP                     &kp F6        &kp F7            &kp F8       &kp F9          &kp F10          &kp F11
+&trans          &bt BT_CLR_ALL  &none   &bt BT_NXT   &bt BT_PRV  &bt BT_CLR                &mmv MOVE_LEFT  &mkp LCLK       &mmv MOVE_RIGHT  &kp C_STOP    &kp C_PLAY_PAUSE  &kp C_NEXT   &kp C_PREVIOUS  &kp PRINTSCREEN  &kp F12
+&trans          &sys_reset      &none   &bootloader  &none       &none       &kp C_MUTE                    &mmv MOVE_DOWN                   &none         &none             &bootloader  &sys_reset      &kp SCROLLLOCK   &kp PAUSE_BREAK
+                                        &trans       &trans      &trans                                                                     &kp LEFT_ALT  &trans            &trans
             >;
 
             sensor-bindings = <&scroll_encoder>;
