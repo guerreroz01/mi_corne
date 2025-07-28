@@ -90,10 +90,10 @@
         default_layer {
             display-name = "OLIVER";
             bindings = <
-&kp TAB         &kp Q  &kp W  &kp F     &kp P  &kp B                             &kp UP                &kp J               &kp L  &kp U         &kp Y          &kp ES_N_TILDE  &kp BSPC
-&kp LEFT_SHIFT  &kp A  &kp R  &kp S     &kp T  &kp G                   &kp LEFT  &kp ENTER  &kp RIGHT  &kp M               &kp N  &kp ES_E      &kp I          &kp O           &kp ES_ACUTE
-&kp LCTRL       &kp X  &kp C  &kp D     &kp V  &kp Z         &tog 4              &kp DOWN              &kp ES_K            &kp H  &kp ES_COMMA  &kp ES_PERIOD  &kp ES_MINUS    &kp ESC
-                              &kp RWIN  &mo 1  &kp ES_SPACE                                            &mt LEFT_ALT ENTER  &mo 2  &kp RALT
+&kp TAB         &kp Q  &kp W  &kp F     &kp P  &kp B                                 &kp UP                &kp J               &kp L  &kp U         &kp Y          &kp ES_N_TILDE  &kp BSPC
+&kp LEFT_SHIFT  &kp A  &kp R  &kp S     &kp T  &kp G                       &kp LEFT  &kp ENTER  &kp RIGHT  &kp M               &kp N  &kp ES_E      &kp I          &kp O           &kp ES_ACUTE
+&kp LCTRL       &kp X  &kp C  &kp D     &kp V  &kp Z         &kp C_MUTE              &kp DOWN              &kp ES_K            &kp H  &kp ES_COMMA  &kp ES_PERIOD  &kp ES_MINUS    &kp ESC
+                              &kp RWIN  &mo 1  &kp ES_SPACE                                                &mt LEFT_ALT ENTER  &mo 2  &kp RALT
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
@@ -133,18 +133,6 @@
             >;
 
             sensor-bindings = <&scroll_encoder>;
-        };
-
-        GAME {
-            display-name = "GAME";
-            bindings = <
-&kp TAB         &kp Q  &kp W  &kp E  &kp R         &kp T                              &kp UP                &kp Y               &kp U  &kp I         &kp O          &kp P           &kp BSPC
-&kp LEFT_SHIFT  &kp A  &kp S  &kp D  &kp F         &kp G                    &kp LEFT  &kp ENTER  &kp RIGHT  &kp H               &kp J  &kp K         &kp L          &kp ES_N_TILDE  &kp ES_ACUTE
-&kp LCTRL       &kp Z  &kp X  &kp C  &kp V         &kp B          &tog 4              &kp DOWN              &kp N               &kp M  &kp ES_COMMA  &kp ES_PERIOD  &kp ES_MINUS    &kp ESC
-                              &mo 1  &kp ES_SPACE  &kp RIGHT_GUI                                            &mt LEFT_ALT ENTER  &mo 2  &kp RALT
-            >;
-
-            sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOLUME_DOWN>;
         };
     };
 };
