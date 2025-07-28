@@ -239,9 +239,9 @@ layers:
   - (ZMK HID USAGE(HID USAGE KEY, HID USAGE KEY KEYBOARD PERIOD AND GREATER THAN))
   - (ZMK HID USAGE(HID USAGE KEY, HID USAGE KEY KEYBOARD SLASH AND QUESTION MARK))
   - $$mdi:keyboard-esc$$
-  - RWIN
   - NUMBER
   - (ZMK HID USAGE(HID USAGE KEY, HID USAGE KEY KEYBOARD SPACEBAR))
+  - RIGHT GUI
   - {t: '$$mdi:keyboard-return$$', h: '$$mdi:apple-keyboard-option$$'}
   - SYMBOL
   - $$mdi:apple-keyboard-option$$
