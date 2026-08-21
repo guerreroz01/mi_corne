@@ -26,10 +26,6 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define BONGO_RESET_DELAY_MS 200
 #define BONGO_IDLE_INTERVAL_MS 1500
 
-/* Scale the cat so it does not fill the full 68px display height after the
- * 90 degree canvas rotation; leaves room for the "OLIVER" label below. */
-#define BONGO_ZOOM 180 /* ~70% of LV_IMG_ZOOM_NONE (256) */
-
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 /*
@@ -49,22 +45,6 @@ static void bongo_idle_work_handler(struct k_work *work);
 K_WORK_DELAYABLE_DEFINE(bongo_reset_work, bongo_reset_work_handler);
 K_WORK_DELAYABLE_DEFINE(bongo_idle_work, bongo_idle_work_handler);
 
-/* Rotate the cat canvas 90 degrees and scale it with BONGO_ZOOM so the cat
- * appears upright and smaller, centered in the canvas. */
-static void rotate_bongo_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
-    static lv_color_t cbuf_tmp[CANVAS_SIZE * CANVAS_SIZE];
-    memcpy(cbuf_tmp, cbuf, sizeof(cbuf_tmp));
-    lv_img_dsc_t img;
-    img.data = (void *)cbuf_tmp;
-    img.header.cf = LV_IMG_CF_TRUE_COLOR;
-    img.header.w = CANVAS_SIZE;
-    img.header.h = CANVAS_SIZE;
-
-    lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
-    lv_canvas_transform(canvas, &img, 900, BONGO_ZOOM, -1, 0, CANVAS_SIZE / 2, CANVAS_SIZE / 2,
-                        true);
-}
-
 static void draw_bongo_cat(struct bongo_status_widget *widget, const lv_img_dsc_t *frame) {
     lv_obj_t *canvas = lv_obj_get_child(widget->obj, 1);
 
@@ -72,13 +52,28 @@ static void draw_bongo_cat(struct bongo_status_widget *widget, const lv_img_dsc_
     init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
     lv_canvas_draw_rect(canvas, 0, 0, CANVAS_SIZE, CANVAS_SIZE, &rect_black_dsc);
 
-    // The bongo frames are 68x40; center them vertically inside the 68x68
-    // canvas before rotating/scaling the whole canvas 90 degrees.
+    // The bongo frames are 68x40; draw them at y=28 inside the 68x68 canvas
+    // and let rotate_canvas rotate the whole canvas 90 degrees, exactly like
+    // the upstream nice-view-mod widget does (draw_middle).
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
-    lv_canvas_draw_img(canvas, 0, 14, frame, &img_dsc);
+    lv_canvas_draw_img(canvas, 0, 28, frame, &img_dsc);
 
-    rotate_bongo_canvas(canvas, widget->cbuf2);
+    rotate_canvas(canvas, widget->cbuf2);
+}
+
+static void draw_oliver(struct bongo_status_widget *widget) {
+    lv_obj_t *canvas = lv_obj_get_child(widget->obj, 2);
+
+    lv_draw_rect_dsc_t rect_black_dsc;
+    init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
+    lv_canvas_draw_rect(canvas, 0, 0, CANVAS_SIZE, CANVAS_SIZE, &rect_black_dsc);
+
+    lv_draw_label_dsc_t label_dsc;
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &lv_font_montserrat_14, LV_TEXT_ALIGN_CENTER);
+    lv_canvas_draw_text(canvas, 0, 8, CANVAS_SIZE, &label_dsc, "OLIVER");
+
+    rotate_canvas(canvas, widget->cbuf3);
 }
 
 static void set_bongo_frame(const lv_img_dsc_t *frame) {
@@ -193,38 +188,27 @@ int zmk_widget_bongo_init(struct bongo_status_widget *widget, lv_obj_t *parent) 
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 160, 68);
 
-    // Top canvas (battery + connection), same layout as the stock nice_view
-    // peripheral widget: 68x68 canvas rotated 90 degrees on the right side,
-    // showing battery at top-left and the connection symbol at top-right.
+    // Three 68x68 canvases, each rotated 90 degrees, laid out exactly like
+    // the upstream nice-view-mod status widget: battery/connection on the
+    // right, the bongo cat in the middle, and the "OLIVER" text on the left
+    // (which ends up at the bottom once the panel rotation is applied).
     lv_obj_t *top = lv_canvas_create(widget->obj);
     lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_canvas_set_buffer(top, widget->cbuf, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    // Bongo cat canvas: 68x68 rotated 90 degrees and scaled to ~70%, placed
-    // in the upper-left area so the "OLIVER" label fits below it.
     lv_obj_t *bongo = lv_canvas_create(widget->obj);
-    lv_obj_align(bongo, LV_ALIGN_TOP_LEFT, 12, -10);
+    lv_obj_align(bongo, LV_ALIGN_TOP_LEFT, 24, 0);
     lv_canvas_set_buffer(bongo, widget->cbuf2, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    // "OLIVER" label below the cat. The nice!view panel is mounted rotated
-    // 90 degrees, so the label needs the same rotation compensation that the
-    // canvas widgets get (rotate_canvas uses +900); otherwise the text appears
-    // on its side. Rotate +90 degrees around the label center to stand it
-    // upright.
-    widget->label = lv_label_create(widget->obj);
-    lv_obj_set_style_text_color(widget->label, LVGL_FOREGROUND, 0);
-    lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_14, 0);
-    lv_label_set_text(widget->label, "OLIVER");
-    lv_obj_align(widget->label, LV_ALIGN_BOTTOM_MID, -34, -4);
-    lv_obj_update_layout(widget->label);
-    lv_obj_set_style_transform_pivot_x(widget->label, lv_obj_get_width(widget->label) / 2, 0);
-    lv_obj_set_style_transform_pivot_y(widget->label, lv_obj_get_height(widget->label) / 2, 0);
-    lv_obj_set_style_transform_angle(widget->label, 900, 0);
+    lv_obj_t *oliver = lv_canvas_create(widget->obj);
+    lv_obj_align(oliver, LV_ALIGN_TOP_LEFT, -44, 0);
+    lv_canvas_set_buffer(oliver, widget->cbuf3, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
     sys_slist_append(&widgets, &widget->node);
     widget_bongo_status_init();
 
-    // Draw the initial resting frame.
+    // Draw the "OLIVER" text once (static) and the initial resting frame.
+    draw_oliver(widget);
     draw_bongo_cat(widget, &bongo_resting);
 
     return 0;
