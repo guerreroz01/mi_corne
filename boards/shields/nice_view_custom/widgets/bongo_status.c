@@ -206,12 +206,20 @@ int zmk_widget_bongo_init(struct bongo_status_widget *widget, lv_obj_t *parent) 
     lv_obj_align(bongo, LV_ALIGN_TOP_LEFT, 12, -10);
     lv_canvas_set_buffer(bongo, widget->cbuf2, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    // "OLIVER" label below the cat
+    // "OLIVER" label below the cat. The nice!view panel is mounted rotated
+    // 90 degrees, so the label needs the same rotation compensation that the
+    // canvas widgets get (rotate_canvas uses +900); otherwise the text appears
+    // on its side. Rotate +90 degrees around the label center to stand it
+    // upright.
     widget->label = lv_label_create(widget->obj);
     lv_obj_set_style_text_color(widget->label, LVGL_FOREGROUND, 0);
     lv_obj_set_style_text_font(widget->label, &lv_font_montserrat_14, 0);
     lv_label_set_text(widget->label, "OLIVER");
     lv_obj_align(widget->label, LV_ALIGN_BOTTOM_MID, -34, -4);
+    lv_obj_update_layout(widget->label);
+    lv_obj_set_style_transform_pivot_x(widget->label, lv_obj_get_width(widget->label) / 2, 0);
+    lv_obj_set_style_transform_pivot_y(widget->label, lv_obj_get_height(widget->label) / 2, 0);
+    lv_obj_set_style_transform_angle(widget->label, 900, 0);
 
     sys_slist_append(&widgets, &widget->node);
     widget_bongo_status_init();
