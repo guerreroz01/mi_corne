@@ -26,6 +26,16 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define BONGO_RESET_DELAY_MS 200
 #define BONGO_IDLE_INTERVAL_MS 1500
 
+/* Local WPM-style key counter, replicating the upstream nice-view-mod
+ * WPM graph. The real ZMK WPM event (zmk_wpm_state_changed) only exists on
+ * the split central, so this half computes its own words-per-minute from the
+ * local zmk_position_state_changed key presses, mirroring the ZMK formula
+ * (5 keystrokes = 1 word, window of a few seconds). */
+#define WPM_UPDATE_INTERVAL_MS 1000
+#define WPM_RESET_INTERVAL_MS 5000
+#define CHARS_PER_WORD 5.0
+#define WPM_HISTORY_SIZE 10
+
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
 /*
@@ -39,11 +49,18 @@ static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 static bool keys_active = false;
 static bool idle_toggle = false;
 
+static uint32_t local_key_press_count = 0;
+static uint32_t wpm_update_counter = 0;
+static uint8_t wpm_history[WPM_HISTORY_SIZE] = {0};
+
 static void bongo_reset_work_handler(struct k_work *work);
 static void bongo_idle_work_handler(struct k_work *work);
+static void wpm_tick_work_handler(struct k_work *work);
+static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct bongo_status_state *state);
 
 K_WORK_DELAYABLE_DEFINE(bongo_reset_work, bongo_reset_work_handler);
 K_WORK_DELAYABLE_DEFINE(bongo_idle_work, bongo_idle_work_handler);
+K_WORK_DELAYABLE_DEFINE(wpm_tick_work, wpm_tick_work_handler);
 
 static void draw_bongo_cat(struct bongo_status_widget *widget, const lv_img_dsc_t *frame) {
     lv_obj_t *canvas = lv_obj_get_child(widget->obj, 1);
@@ -104,6 +121,10 @@ static struct bongo_status_state get_state(const zmk_event_t *eh) {
         const struct zmk_position_state_changed *pos = as_zmk_position_state_changed(eh);
         if (pos != NULL) {
             state.key_pressed = pos->state;
+            // Count key releases only, like the upstream ZMK WPM counter.
+            if (!pos->state) {
+                local_key_press_count++;
+            }
         }
 
         const struct zmk_battery_state_changed *bat = as_zmk_battery_state_changed(eh);
@@ -121,13 +142,47 @@ static struct bongo_status_state get_state(const zmk_event_t *eh) {
     return state;
 }
 
+static void wpm_tick_work_handler(struct k_work *work) {
+    // Same formula as ZMK's src/wpm.c: words = keystrokes / CHARS_PER_WORD,
+    // wpm = words / (elapsed_seconds / 60).
+    wpm_update_counter++;
+    uint8_t wpm = (uint8_t)((local_key_press_count / CHARS_PER_WORD) /
+                            (wpm_update_counter * WPM_UPDATE_INTERVAL_MS / 60000.0));
+
+    // Shift history and store the new sample.
+    for (int i = 0; i < WPM_HISTORY_SIZE - 1; i++) {
+        wpm_history[i] = wpm_history[i + 1];
+    }
+    wpm_history[WPM_HISTORY_SIZE - 1] = wpm;
+
+    struct bongo_status_widget *widget;
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
+        struct bongo_status_state st = {.battery = widget->state.battery,
+                                        .connected = widget->state.connected};
+        draw_top(widget->obj, widget->cbuf, &st);
+    }
+
+    if (wpm_update_counter >= WPM_RESET_INTERVAL_MS / WPM_UPDATE_INTERVAL_MS) {
+        wpm_update_counter = 0;
+        local_key_press_count = 0;
+    }
+
+    k_work_schedule(&wpm_tick_work, K_MSEC(WPM_UPDATE_INTERVAL_MS));
+}
+
 static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct bongo_status_state *state) {
     lv_obj_t *canvas = lv_obj_get_child(widget, 0);
 
     lv_draw_label_dsc_t label_dsc;
     init_label_dsc(&label_dsc, LVGL_FOREGROUND, &lv_font_montserrat_16, LV_TEXT_ALIGN_RIGHT);
+    lv_draw_label_dsc_t label_dsc_wpm;
+    init_label_dsc(&label_dsc_wpm, LVGL_FOREGROUND, &lv_font_unscii_8, LV_TEXT_ALIGN_RIGHT);
     lv_draw_rect_dsc_t rect_black_dsc;
     init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
+    lv_draw_rect_dsc_t rect_white_dsc;
+    init_rect_dsc(&rect_white_dsc, LVGL_FOREGROUND);
+    lv_draw_line_dsc_t line_dsc;
+    init_line_dsc(&line_dsc, LVGL_FOREGROUND, 1);
 
     // Fill background
     lv_canvas_draw_rect(canvas, 0, 0, CANVAS_SIZE, CANVAS_SIZE, &rect_black_dsc);
@@ -139,6 +194,59 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct bongo_sta
     // Draw connection status (top right)
     lv_canvas_draw_text(canvas, 0, 0, CANVAS_SIZE, &label_dsc,
                         state->connected ? LV_SYMBOL_WIFI : LV_SYMBOL_CLOSE);
+
+    // Draw the WPM-style key counter with its graph, replicating the
+    // upstream nice-view-mod widget (CONFIG_ZMK_WPM_GRAPH_ENABLED block).
+    lv_canvas_draw_rect(canvas, 0, 21, 68, 42, &rect_white_dsc);
+    lv_canvas_draw_rect(canvas, 1, 22, 66, 40, &rect_black_dsc);
+
+    // Connection circle in the top-left of the WPM area (upstream shows the
+    // BLE profile number there; on a split peripheral the only profile is the
+    // dongle, so show the link state instead).
+    lv_draw_arc_dsc_t arc_dsc;
+    init_arc_dsc(&arc_dsc, LVGL_FOREGROUND, 2);
+    lv_draw_arc_dsc_t arc_dsc_filled;
+    init_arc_dsc(&arc_dsc_filled, LVGL_FOREGROUND, 9);
+    lv_draw_label_dsc_t label_dsc_black;
+    init_label_dsc(&label_dsc_black, LVGL_BACKGROUND, &lv_font_montserrat_18, LV_TEXT_ALIGN_CENTER);
+
+    int x = 13, y = 34; // Position circle in top left of WPM area
+    lv_canvas_draw_arc(canvas, x, y, 11, 0, 360, &arc_dsc);
+    lv_canvas_draw_arc(canvas, x, y, 7, 0, 359, &arc_dsc_filled);
+
+    // Draw connection symbol inside the circle
+    lv_canvas_draw_text(canvas, x - 5, y - 10, 10, &label_dsc_black,
+                        state->connected ? LV_SYMBOL_WIFI : LV_SYMBOL_CLOSE);
+
+    // Draw WPM text and graph
+    char wpm_text[6] = {};
+    snprintf(wpm_text, sizeof(wpm_text), "%d", wpm_history[WPM_HISTORY_SIZE - 1]);
+    lv_canvas_draw_text(canvas, 42, 52, 24, &label_dsc_wpm, wpm_text);
+
+    // Draw WPM graph
+    int max = 0;
+    int min = 256;
+
+    for (int i = 0; i < WPM_HISTORY_SIZE; i++) {
+        if (wpm_history[i] > max) {
+            max = wpm_history[i];
+        }
+        if (wpm_history[i] < min) {
+            min = wpm_history[i];
+        }
+    }
+
+    int range = max - min;
+    if (range == 0) {
+        range = 1;
+    }
+
+    lv_point_t points[WPM_HISTORY_SIZE];
+    for (int i = 0; i < WPM_HISTORY_SIZE; i++) {
+        points[i].x = 2 + i * 7;
+        points[i].y = 60 - (wpm_history[i] - min) * 36 / range;
+    }
+    lv_canvas_draw_line(canvas, points, WPM_HISTORY_SIZE, &line_dsc);
 
     // Rotate canvas
     rotate_canvas(canvas, cbuf);
@@ -210,6 +318,9 @@ int zmk_widget_bongo_init(struct bongo_status_widget *widget, lv_obj_t *parent) 
     // Draw the "OLIVER" text once (static) and the initial resting frame.
     draw_oliver(widget);
     draw_bongo_cat(widget, &bongo_resting);
+
+    // Start the local WPM-style key counter tick.
+    k_work_schedule(&wpm_tick_work, K_MSEC(WPM_UPDATE_INTERVAL_MS));
 
     return 0;
 }

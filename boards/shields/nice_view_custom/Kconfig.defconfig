@@ -33,14 +33,19 @@ config ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 # The bongo status widget is peripheral-safe: it only uses local position
 # state and battery events that exist on a split peripheral half. No
 # central-only ZMK symbols are selected here (no ZMK_WPM, ZMK_HID, WPM graph
-# or modifier widgets).
+# or modifier widgets). The WPM-style key counter is computed locally from
+# zmk_position_state_changed because the real zmk_wpm_state_changed event
+# only exists on the split central.
 config NICE_VIEW_WIDGET_STATUS
     bool "Custom nice!view status widget"
     select LV_FONT_MONTSERRAT_18
     select LV_FONT_MONTSERRAT_16
     select LV_FONT_MONTSERRAT_14
+    select LV_FONT_UNSCII_8
     select LV_USE_IMG
     select LV_USE_CANVAS
+    select LV_USE_LINE
+    select LV_USE_ARC
     default y
 
 config NICE_VIEW_WIDGET_INVERTED
