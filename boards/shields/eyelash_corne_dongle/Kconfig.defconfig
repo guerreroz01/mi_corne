@@ -1,0 +1,24 @@
+if SHIELD_EYELASH_CORNE_DONGLE
+
+# Max 16 characters in keyboard name
+config ZMK_KEYBOARD_NAME
+    default "Eyelash Corne"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+config ZMK_SPLIT
+    default y
+
+# Left and right halves connect to this dongle.
+config ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS
+    default 2
+
+# ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS (2) + default BT profiles (5)
+config BT_MAX_CONN
+    default 7
+
+config BT_MAX_PAIRED
+    default 7
+
+endif
