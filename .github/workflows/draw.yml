@@ -13,6 +13,9 @@ jobs:
     permissions:
       contents: write
     with:
+      # eyelash_corne_dongle.keymap is an #include of eyelash_corne.keymap,
+      # so only draw the main keymap (avoids a duplicate/identical diagram).
+      keymap_patterns: "config/eyelash_corne.keymap"
       commit_message: "[Draw] ${{ github.event.head_commit.message }}"
       destination: "commit"
       fail_on_error: ${{ fromJSON(true) }}

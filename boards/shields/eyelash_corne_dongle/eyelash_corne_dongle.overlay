@@ -6,12 +6,14 @@
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <dt-bindings/led/led.h>
 #include <physical_layouts.dtsi>
 
 / {
     chosen {
         zmk,kscan = &mock_kscan;
         zmk,physical-layout = &default_layout;
+        zmk,underglow = &led_strip;
     };
 
     mock_kscan: mock_kscan_0 {
@@ -21,6 +23,7 @@
         events = <0>;
     };
 
+    /* default_transform copied verbatim from boards/arm/eyelash_corne/eyelash_corne.dtsi */
     /*
      * The physical encoder lives on the left peripheral half. The central
      * side only reserves sensor index 0 here so ZMK_KEYMAP_HAS_SENSORS is
@@ -110,5 +113,26 @@
             , <&key_physical_attrs 100 100 1200  312 (-1200)  1300   412>
             , <&key_physical_attrs 100 100 1300  312       0     0     0>
             ;
+    };
+};
+
+/*
+ * Virtual LED strip: the dongle has no physical LEDs, but the RGB
+ * underglow behavior is GLOBAL and runs on the central side. The
+ * chain-length is 0 so the driver never writes anything, while the
+ * central RGB state (on/off, brightness, effect) is tracked here and
+ * propagated to the peripheral halves over the split transport.
+ */
+&spi1 {
+    status = "okay";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+        chain-length = <0>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+        color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
     };
 };

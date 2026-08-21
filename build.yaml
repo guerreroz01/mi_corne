@@ -14,7 +14,7 @@ include:
   - board: nice_nano_v2
     shield: eyelash_corne_dongle
     snippet: studio-rpc-usb-uart
-    cmake-args: -DCONFIG_ZMK_STUDIO=y -DCONFIG_ZMK_STUDIO_LOCKING=n -DCONFIG_BT_MAX_CONN=7 -DCONFIG_BT_MAX_PAIRED=7 -DCONFIG_ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS=2 -DCONFIG_ZMK_RGB_UNDERGLOW=n -DCONFIG_ZMK_BACKLIGHT=n
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DCONFIG_ZMK_STUDIO_LOCKING=n -DCONFIG_BT_MAX_CONN=7 -DCONFIG_BT_MAX_PAIRED=7 -DCONFIG_ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS=2 -DCONFIG_ZMK_BACKLIGHT=n
     artifact-name: eyelash_corne_dongle
   # Settings reset for the dongle's nice!nano
   - board: nice_nano_v2
