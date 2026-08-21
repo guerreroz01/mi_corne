@@ -45,9 +45,26 @@ static void bongo_idle_work_handler(struct k_work *work);
 K_WORK_DELAYABLE_DEFINE(bongo_reset_work, bongo_reset_work_handler);
 K_WORK_DELAYABLE_DEFINE(bongo_idle_work, bongo_idle_work_handler);
 
+static void draw_bongo_cat(struct bongo_status_widget *widget, const lv_img_dsc_t *frame) {
+    lv_obj_t *canvas = lv_obj_get_child(widget->obj, 1);
+
+    lv_draw_rect_dsc_t rect_black_dsc;
+    init_rect_dsc(&rect_black_dsc, LVGL_BACKGROUND);
+    lv_canvas_draw_rect(canvas, 0, 0, CANVAS_SIZE, CANVAS_SIZE, &rect_black_dsc);
+
+    // The bongo frames are 68x40; center them vertically inside the 68x68
+    // canvas before rotating the whole canvas 90 degrees (the display is
+    // mounted rotated, so the cat ends up standing upright and centered).
+    lv_draw_img_dsc_t img_dsc;
+    lv_draw_img_dsc_init(&img_dsc);
+    lv_canvas_draw_img(canvas, 0, 14, frame, &img_dsc);
+
+    rotate_canvas(canvas, widget->cbuf2);
+}
+
 static void set_bongo_frame(const lv_img_dsc_t *frame) {
     struct bongo_status_widget *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { lv_img_set_src(widget->img, frame); }
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { draw_bongo_cat(widget, frame); }
 }
 
 static void bongo_reset_work_handler(struct k_work *work) {
@@ -125,14 +142,14 @@ static void redraw_bongo_status(struct bongo_status_widget *widget,
 
     if (state.key_pressed) {
         keys_active = true;
-        lv_img_set_src(widget->img, &bongo_casualright);
+        set_bongo_frame(&bongo_casualright);
         k_work_schedule(&bongo_reset_work, K_MSEC(BONGO_RESET_DELAY_MS));
     } else if (was_active) {
         keys_active = false;
         k_work_cancel(&bongo_reset_work);
         k_work_cancel(&bongo_idle_work);
         idle_toggle = false;
-        lv_img_set_src(widget->img, &bongo_resting);
+        set_bongo_frame(&bongo_resting);
         k_work_schedule(&bongo_idle_work, K_MSEC(BONGO_IDLE_INTERVAL_MS));
     }
 }
@@ -164,13 +181,17 @@ int zmk_widget_bongo_init(struct bongo_status_widget *widget, lv_obj_t *parent) 
     lv_obj_align(top, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_canvas_set_buffer(top, widget->cbuf, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
-    // Bongo cat where the stock widget shows its art
-    widget->img = lv_img_create(widget->obj);
-    lv_img_set_src(widget->img, &bongo_resting);
-    lv_obj_align(widget->img, LV_ALIGN_TOP_LEFT, 0, 0);
+    // Bongo cat canvas: 68x68 rotated 90 degrees, centered in the left area
+    // (between the left edge and the top-right status canvas).
+    lv_obj_t *bongo = lv_canvas_create(widget->obj);
+    lv_obj_align(bongo, LV_ALIGN_LEFT_MID, 12, 0);
+    lv_canvas_set_buffer(bongo, widget->cbuf2, CANVAS_SIZE, CANVAS_SIZE, LV_IMG_CF_TRUE_COLOR);
 
     sys_slist_append(&widgets, &widget->node);
     widget_bongo_status_init();
+
+    // Draw the initial resting frame.
+    draw_bongo_cat(widget, &bongo_resting);
 
     return 0;
 }
