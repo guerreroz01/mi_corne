@@ -21,6 +21,7 @@ struct bongo_status_widget {
     sys_snode_t node;
     lv_obj_t *obj;
     lv_obj_t *img;
+    lv_obj_t *label;
     lv_color_t cbuf[CANVAS_SIZE * CANVAS_SIZE];
     lv_color_t cbuf2[CANVAS_SIZE * CANVAS_SIZE];
     struct bongo_status_state state;
