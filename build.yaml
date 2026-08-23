@@ -11,15 +11,15 @@ include:
     cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
     artifact-name: eyelash_corne_right
   # Dongle — split central connected to the PC over USB; ZMK Studio runs here
-  - board: nice_nano_v2
+  - board: seeeduino_xiao_ble
     shield: eyelash_corne_dongle
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y -DCONFIG_ZMK_STUDIO_LOCKING=n -DCONFIG_BT_MAX_CONN=7 -DCONFIG_BT_MAX_PAIRED=7 -DCONFIG_ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS=2 -DCONFIG_ZMK_BACKLIGHT=n
     artifact-name: eyelash_corne_dongle
-  # Settings reset for the dongle's nice!nano
-  - board: nice_nano_v2
+  # Settings reset for the dongle's XIAO BLE
+  - board: seeeduino_xiao_ble
     shield: settings_reset
-    artifact-name: settings_reset_nice_nano
+    artifact-name: settings_reset_xiao_ble
   # Settings reset for the keyboard halves (eyelash_corne board)
   - board: eyelash_corne_left
     shield: settings_reset

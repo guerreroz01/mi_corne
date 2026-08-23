@@ -9,9 +9,10 @@
 
 **If you already have a ZMK config repository, [you can add this one as a module instead of forking](https://zmk.dev/docs/features/modules#building-with-modules).**
 
-## Dongle nice!nano
+## Dongle XIAO BLE
 
-Esta configuración soporta una arquitectura de **dongle** con tres nice!nano:
+Esta configuración soporta una arquitectura de **dongle**: las dos mitades usan nice!nano
+y el dongle usa un **Seeed XIAO BLE (nRF52840)**:
 
 ```text
 eyelash_corne izquierda            eyelash_corne derecha
@@ -20,12 +21,12 @@ split peripheral                   split peripheral
         \                          /
          \  BLE / split ZMK       /
           \                      /
-           nice!nano #3 (dongle)
+           XIAO BLE (dongle)
            ZMK split central
            USB HID -> PC
 ```
 
-El PC ve un único teclado USB conectado al tercer nice!nano. Las dos mitades se conectan
+El PC ve un único teclado USB conectado al XIAO BLE. Las dos mitades se conectan
 inalámbricamente al dongle usando el transporte BLE/split de ZMK. El dongle no tiene
 switches, encoder, LEDs ni pantalla: solo actúa como central inalámbrico y dispositivo
 USB hacia el host. El encoder físico sigue viviendo en la mitad izquierda y sus eventos
@@ -39,22 +40,24 @@ El workflow de GitHub Actions produce estos artefactos (cada uno en su propio ZI
 | ------------------- | ------------------------------------ |
 | Mitad izquierda     | `eyelash_corne_left`                 |
 | Mitad derecha       | `eyelash_corne_right`                |
-| Tercer nice!nano    | `eyelash_corne_dongle`               |
-| Reset (las tres)    | `settings_reset_nice_nano`           |
+| Dongle (XIAO BLE)   | `eyelash_corne_dongle`               |
 | Reset (mitades)     | `settings_reset_eyelash_corne`       |
+| Reset (dongle)      | `settings_reset_xiao_ble`            |
 
 ### Primer flasheo (nuevo emparejamiento)
 
 1. Confirma que el keymap está commiteado en Git (por si hay que revertir).
-2. Pon cada nice!nano en modo bootloader UF2 con doble reset.
-3. Flashea `settings_reset` en **las tres placas**:
-   - `settings_reset_nice_nano` en el dongle;
+2. Pon cada placa en modo bootloader UF2:
+   - nice!nano: doble reset;
+   - XIAO BLE: doble click en el botón Reset (el LED parpadea y aparece un disco UF2).
+3. Flashea `settings_reset` en las tres placas:
+   - `settings_reset_xiao_ble` en el dongle;
    - `settings_reset_eyelash_corne` en las dos mitades.
 4. Espera a que el reset termine (el LED parpadea y se reinicia solo).
 5. Vuelve a entrar al bootloader en cada placa.
 6. Flashea `eyelash_corne_left` en la mitad izquierda.
 7. Flashea `eyelash_corne_right` en la mitad derecha.
-8. Flashea `eyelash_corne_dongle` en el tercer nice!nano.
+8. Flashea `eyelash_corne_dongle` en el XIAO BLE.
 9. Conecta el dongle al PC por USB.
 10. Enciende / reinicia las dos mitades.
 11. Verifica el emparejamiento: cada mitad se conecta sola al dongle (el dongle es el

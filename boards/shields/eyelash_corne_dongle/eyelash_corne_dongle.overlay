@@ -122,8 +122,11 @@
  * chain-length is 0 so the driver never writes anything, while the
  * central RGB state (on/off, brightness, effect) is tracked here and
  * propagated to the peripheral halves over the split transport.
+ *
+ * Seeed XIAO BLE exposes only spi2 (D8/D9/D10), so the virtual strip
+ * lives there. chain-length 0 means nothing is ever written to the bus.
  */
-&spi1 {
+&spi2 {
     status = "okay";
 
     led_strip: ws2812@0 {
