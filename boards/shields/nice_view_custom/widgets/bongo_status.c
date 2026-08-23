@@ -200,24 +200,6 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct bongo_sta
     lv_canvas_draw_rect(canvas, 0, 21, 68, 42, &rect_white_dsc);
     lv_canvas_draw_rect(canvas, 1, 22, 66, 40, &rect_black_dsc);
 
-    // Connection circle in the top-left of the WPM area (upstream shows the
-    // BLE profile number there; on a split peripheral the only profile is the
-    // dongle, so show the link state instead).
-    lv_draw_arc_dsc_t arc_dsc;
-    init_arc_dsc(&arc_dsc, LVGL_FOREGROUND, 2);
-    lv_draw_arc_dsc_t arc_dsc_filled;
-    init_arc_dsc(&arc_dsc_filled, LVGL_FOREGROUND, 9);
-    lv_draw_label_dsc_t label_dsc_black;
-    init_label_dsc(&label_dsc_black, LVGL_BACKGROUND, &lv_font_montserrat_18, LV_TEXT_ALIGN_CENTER);
-
-    int x = 13, y = 34; // Position circle in top left of WPM area
-    lv_canvas_draw_arc(canvas, x, y, 11, 0, 360, &arc_dsc);
-    lv_canvas_draw_arc(canvas, x, y, 7, 0, 359, &arc_dsc_filled);
-
-    // Draw connection symbol inside the circle
-    lv_canvas_draw_text(canvas, x - 5, y - 10, 10, &label_dsc_black,
-                        state->connected ? LV_SYMBOL_WIFI : LV_SYMBOL_CLOSE);
-
     // Draw WPM text and graph
     char wpm_text[6] = {};
     snprintf(wpm_text, sizeof(wpm_text), "%d", wpm_history[WPM_HISTORY_SIZE - 1]);
